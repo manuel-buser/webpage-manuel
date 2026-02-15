@@ -63,9 +63,9 @@ export function Hero3D() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 tracking-tight"
           >
-            <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent drop-shadow-sm">
               Manuel Buser
             </span>
           </motion.h1>
@@ -75,10 +75,10 @@ export function Hero3D() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-            className="text-2xl sm:text-3xl md:text-4xl text-foreground/80 mb-8 font-mono h-12"
+            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-foreground/90 mb-8 font-mono min-h-[3rem] tracking-tight"
           >
             {displayedText}
-            <span className="animate-pulse">|</span>
+            <span className="animate-pulse text-primary">|</span>
           </motion.h2>
 
           {/* Description */}
@@ -86,7 +86,7 @@ export function Hero3D() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 1 }}
-            className="text-lg sm:text-xl text-foreground/60 mb-12 max-w-3xl mx-auto leading-relaxed"
+            className="text-base sm:text-lg md:text-xl text-foreground/70 mb-12 max-w-3xl mx-auto leading-relaxed px-2"
           >
             {profile}
           </motion.p>
@@ -100,13 +100,14 @@ export function Hero3D() {
           >
             <Link
               href="/projects"
-              className="px-8 py-4 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors shadow-lg hover:shadow-xl"
+              className="group relative px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-2xl hover:shadow-primary/25 hover:-translate-y-0.5 overflow-hidden"
             >
-              View My Work
+              <span className="relative z-10">View My Work</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-secondary to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </Link>
             <Link
               href="/contact"
-              className="px-8 py-4 bg-transparent border-2 border-primary text-primary rounded-lg font-medium hover:bg-primary hover:text-white transition-colors"
+              className="px-8 py-4 bg-transparent border-2 border-primary/50 text-foreground rounded-xl font-semibold hover:border-primary hover:bg-primary/10 transition-all duration-300 backdrop-blur-sm"
             >
               Get In Touch
             </Link>
@@ -117,34 +118,34 @@ export function Hero3D() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 1.6 }}
-            className="flex gap-6 justify-center mt-12"
+            className="flex gap-4 justify-center mt-12"
           >
             {personalInfo.github && (
               <a
                 href={personalInfo.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-foreground/60 hover:text-primary transition-colors"
+                className="p-3 rounded-xl bg-muted/50 text-foreground/70 hover:text-primary hover:bg-primary/10 hover:scale-110 transition-all duration-300"
                 aria-label="GitHub"
               >
-                <Github className="w-6 h-6" />
+                <Github className="w-5 h-5" />
               </a>
             )}
             <a
               href={personalInfo.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-foreground/60 hover:text-primary transition-colors"
+              className="p-3 rounded-xl bg-muted/50 text-foreground/70 hover:text-primary hover:bg-primary/10 hover:scale-110 transition-all duration-300"
               aria-label="LinkedIn"
             >
-              <Linkedin className="w-6 h-6" />
+              <Linkedin className="w-5 h-5" />
             </a>
             <a
               href={`mailto:${personalInfo.email}`}
-              className="text-foreground/60 hover:text-primary transition-colors"
+              className="p-3 rounded-xl bg-muted/50 text-foreground/70 hover:text-primary hover:bg-primary/10 hover:scale-110 transition-all duration-300"
               aria-label="Email"
             >
-              <Mail className="w-6 h-6" />
+              <Mail className="w-5 h-5" />
             </a>
           </motion.div>
         </motion.div>
@@ -153,10 +154,11 @@ export function Hero3D() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 2, repeat: Infinity, repeatType: 'reverse' }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          transition={{ duration: 0.5, delay: 2 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         >
-          <ChevronDown className="w-8 h-8 text-foreground/40 animate-bounce" />
+          <span className="text-xs text-foreground/40 uppercase tracking-widest">Scroll</span>
+          <ChevronDown className="w-6 h-6 text-foreground/50 animate-bounce" />
         </motion.div>
       </div>
     </section>

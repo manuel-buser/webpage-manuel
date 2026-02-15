@@ -21,7 +21,8 @@ export function PageTransition({ children }: PageTransitionProps) {
       exit="exit"
       variants={variants}
       transition={{
-        type: 'easeInOut',
+        type: 'tween',
+        ease: 'easeInOut',
         duration: 0.4,
       }}
     >

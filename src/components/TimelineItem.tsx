@@ -43,11 +43,14 @@ export function TimelineItem({ item, index, isLeft }: TimelineItemProps) {
         isLeft ? 'md:justify-end' : 'md:justify-start'
       )}
     >
-      {/* Timeline Dot - Desktop (centered) */}
+      {/* Timeline Dot - Desktop (centered) with glow effect */}
       <div
         className={cn(
-          'absolute left-1/2 -translate-x-1/2 hidden md:flex items-center justify-center w-16 h-16 rounded-full bg-background border-4 shadow-lg z-10',
-          isWork ? 'border-primary' : 'border-secondary'
+          'absolute left-1/2 -translate-x-1/2 hidden md:flex items-center justify-center w-16 h-16 rounded-full bg-surface border-4 z-10 transition-all duration-300',
+          isWork
+            ? 'border-primary shadow-[0_0_20px_rgba(99,102,241,0.4),0_0_40px_rgba(99,102,241,0.2)]'
+            : 'border-secondary shadow-[0_0_20px_rgba(139,92,246,0.4),0_0_40px_rgba(139,92,246,0.2)]',
+          item.endDate === 'present' && 'animate-pulse'
         )}
       >
         <Icon
@@ -55,11 +58,14 @@ export function TimelineItem({ item, index, isLeft }: TimelineItemProps) {
         />
       </div>
 
-      {/* Timeline Dot - Mobile (left side) */}
+      {/* Timeline Dot - Mobile (left side) with glow effect */}
       <div
         className={cn(
-          'absolute left-8 -translate-x-1/2 md:hidden flex items-center justify-center w-12 h-12 rounded-full bg-background border-4 shadow-lg z-10',
-          isWork ? 'border-primary' : 'border-secondary'
+          'absolute left-8 -translate-x-1/2 md:hidden flex items-center justify-center w-12 h-12 rounded-full bg-surface border-4 z-10 transition-all duration-300',
+          isWork
+            ? 'border-primary shadow-[0_0_15px_rgba(99,102,241,0.4),0_0_30px_rgba(99,102,241,0.2)]'
+            : 'border-secondary shadow-[0_0_15px_rgba(139,92,246,0.4),0_0_30px_rgba(139,92,246,0.2)]',
+          item.endDate === 'present' && 'animate-pulse'
         )}
       >
         <Icon
@@ -70,78 +76,92 @@ export function TimelineItem({ item, index, isLeft }: TimelineItemProps) {
       {/* Content Card */}
       <div
         className={cn(
-          'w-full md:w-[calc(50%-4rem)] ml-32 md:ml-0',
+          'w-full md:w-[calc(50%-4rem)] ml-16 md:ml-0',
           isLeft ? 'md:mr-20' : 'md:ml-20'
         )}
       >
         <div
           className={cn(
-            'rounded-xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border-2',
+            'rounded-2xl p-4 sm:p-6 md:p-8 transition-all duration-300 border backdrop-blur-sm group',
+            'hover:-translate-y-1',
             isWork
-              ? 'bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20 hover:border-primary/40'
-              : 'bg-gradient-to-br from-secondary/5 to-secondary/10 border-secondary/20 hover:border-secondary/40'
+              ? 'bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-primary/30 hover:border-primary/50 hover:shadow-[0_8px_30px_rgba(99,102,241,0.15)]'
+              : 'bg-gradient-to-br from-secondary/10 via-secondary/5 to-transparent border-secondary/30 hover:border-secondary/50 hover:shadow-[0_8px_30px_rgba(139,92,246,0.15)]'
           )}
         >
-          {/* Type Badge */}
-          <div
-            className={cn(
-              'inline-flex items-center gap-2 px-4 py-2 mb-4 text-sm font-semibold rounded-full',
-              isWork
-                ? 'bg-primary/15 text-primary'
-                : 'bg-secondary/15 text-secondary'
-            )}
-          >
-            {isWork ? (
-              <>
-                <Briefcase className="w-4 h-4" />
-                <span>Work Experience</span>
-              </>
-            ) : (
-              <>
-                <GraduationCap className="w-4 h-4" />
-                <span>Education</span>
-              </>
-            )}
-          </div>
+          {/* Badge Row */}
+          <div className="flex flex-wrap items-center gap-3 mb-5">
+            {/* Type Badge */}
+            <div
+              className={cn(
+                'inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl',
+                isWork
+                  ? 'bg-primary/20 text-primary'
+                  : 'bg-secondary/20 text-secondary'
+              )}
+            >
+              {isWork ? (
+                <>
+                  <Briefcase className="w-4 h-4" />
+                  <span>Work Experience</span>
+                </>
+              ) : (
+                <>
+                  <GraduationCap className="w-4 h-4" />
+                  <span>Education</span>
+                </>
+              )}
+            </div>
 
-          {/* Period Badge */}
-          <div
-            className={cn(
-              'inline-block px-3 py-1 mb-4 text-xs font-medium rounded-full',
-              isWork
-                ? 'bg-primary/20 text-primary'
-                : 'bg-secondary/20 text-secondary'
+            {/* Period Badge */}
+            <div
+              className={cn(
+                'inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-lg',
+                'bg-muted/80 text-foreground/70'
+              )}
+            >
+              {item.period}
+            </div>
+
+            {/* Current indicator */}
+            {item.endDate === 'present' && (
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-accent/20 text-accent">
+                <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+                Current
+              </div>
             )}
-          >
-            {item.period}
           </div>
 
           {/* Title & Company */}
-          <h3 className="text-2xl font-bold text-foreground mb-2 leading-tight">
+          <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-2 leading-tight tracking-tight">
             {item.title}
           </h3>
           <h4
             className={cn(
-              'text-xl font-semibold mb-2',
+              'text-base sm:text-lg font-semibold mb-1',
               isWork ? 'text-primary' : 'text-secondary'
             )}
           >
             {item.company}
           </h4>
-          <p className="text-sm text-foreground/60 mb-6">{item.location}</p>
+          <p className="text-sm text-foreground/60 mb-6 flex items-center gap-1">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            {item.location}
+          </p>
 
           {/* Description */}
-          <ul className="space-y-4 mb-6">
+          <ul className="space-y-2.5 sm:space-y-3 mb-5 sm:mb-6">
             {item.description.map((desc, i) => (
-              <li key={i} className="text-base text-foreground/85 flex leading-relaxed">
+              <li key={i} className="text-sm sm:text-base text-foreground/80 flex leading-relaxed">
                 <span
                   className={cn(
-                    'mr-3 mt-1 flex-shrink-0',
-                    isWork ? 'text-primary' : 'text-secondary'
+                    'mr-2.5 sm:mr-3 mt-1.5 flex-shrink-0 w-1.5 h-1.5 rounded-full',
+                    isWork ? 'bg-primary' : 'bg-secondary'
                   )}
-                >
-                  •
-                </span>
+                />
                 <span>{desc}</span>
               </li>
             ))}
@@ -149,16 +169,16 @@ export function TimelineItem({ item, index, isLeft }: TimelineItemProps) {
 
           {/* Technologies */}
           {item.technologies && item.technologies.length > 0 && (
-            <div className="flex flex-wrap gap-2 pt-4 border-t border-border/50">
+            <div className="flex flex-wrap gap-2 pt-5 border-t border-border/30">
               {item.technologies.map((tech, i) => (
                 <span
                   key={i}
                   className={cn(
-                    'px-3 py-1.5 text-xs font-medium rounded-md',
+                    'px-3 py-1.5 text-sm font-medium rounded-lg cursor-default',
+                    'transition-all duration-200 hover:scale-105',
                     isWork
-                      ? 'bg-primary/10 text-primary hover:bg-primary/20'
-                      : 'bg-secondary/10 text-secondary hover:bg-secondary/20',
-                    'transition-colors'
+                      ? 'bg-primary/15 text-primary/90 hover:bg-primary/25'
+                      : 'bg-secondary/15 text-secondary/90 hover:bg-secondary/25'
                   )}
                 >
                   {tech}

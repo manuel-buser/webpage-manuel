@@ -119,8 +119,12 @@ void main() {
     color = mix(color, uColor2, pulse * 0.2);
 
     vec3 viewDirection = normalize(cameraPosition - vPosition);
-    float fresnel = pow(1.0 - dot(viewDirection, vNormal), 3.0);
-    color += fresnel * 0.3;
+    float fresnel = pow(1.0 - dot(viewDirection, vNormal), 2.5);
+    color += fresnel * 0.5; // Enhanced fresnel glow
+
+    // Add subtle rim lighting
+    float rim = pow(1.0 - max(dot(viewDirection, vNormal), 0.0), 4.0);
+    color += rim * uColor3 * 0.3;
 
     gl_FragColor = vec4(color, 1.0);
 }
@@ -137,14 +141,14 @@ export function AnimatedSphere({
 }: AnimatedSphereProps) {
   const meshRef = useRef<Mesh>(null);
 
-  // Create custom shader material
+  // Create custom shader material with Neural Network theme colors
   const uniforms = useMemo(
     () => ({
       uTime: { value: 0 },
-      uNoiseStrength: { value: 0.15 },
-      uColor1: { value: new THREE.Color('#3b82f6') }, // Blue
-      uColor2: { value: new THREE.Color('#8b5cf6') }, // Purple
-      uColor3: { value: new THREE.Color('#10b981') }, // Green
+      uNoiseStrength: { value: 0.35 }, // Increased for more dramatic effect
+      uColor1: { value: new THREE.Color('#6366f1') }, // Indigo - primary
+      uColor2: { value: new THREE.Color('#a855f7') }, // Purple - glow
+      uColor3: { value: new THREE.Color('#22d3ee') }, // Cyan - accent
     }),
     []
   );
@@ -166,12 +170,15 @@ export function AnimatedSphere({
       // Update time uniform
       uniforms.uTime.value = state.clock.elapsedTime;
 
-      // Rotate the sphere
-      meshRef.current.rotation.x += 0.001;
-      meshRef.current.rotation.y += 0.002;
+      // Enhanced rotation for more dynamism
+      meshRef.current.rotation.x += 0.002;
+      meshRef.current.rotation.y += 0.003;
 
-      // Gentle floating animation
-      meshRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.2;
+      // More pronounced floating animation
+      meshRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.4) * 0.3;
+
+      // Subtle horizontal sway
+      meshRef.current.position.x = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
     }
   });
 

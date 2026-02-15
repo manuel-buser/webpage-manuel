@@ -1,13 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Enable static export for nginx deployment
+  output: 'export',
+
   // Enable React strict mode for better development experience
   reactStrictMode: true,
 
-  // Optimize images
+  // Disable image optimization for static export
   images: {
-    formats: ['image/avif', 'image/webp'],
-    deviceSizes: [640, 768, 1024, 1280, 1536],
+    unoptimized: true,
   },
 
   // Performance optimizations

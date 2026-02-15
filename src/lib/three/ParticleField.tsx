@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useMemo, useEffect, useState } from 'react';
-import { useFrame, useThree } from '@react-three/fiber';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Points } from 'three';
 import { getParticleCount } from '../utils';
@@ -9,7 +9,6 @@ import { getParticleCount } from '../utils';
 export function ParticleField() {
   const pointsRef = useRef<Points>(null);
   const [count, setCount] = useState(1000);
-  const { size } = useThree();
 
   // Update particle count based on screen size
   useEffect(() => {
@@ -23,9 +22,10 @@ export function ParticleField() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Generate particle positions
-  const positions = useMemo(() => {
+  // Generate particle positions and sizes
+  const { positions, sizes } = useMemo(() => {
     const positions = new Float32Array(count * 3);
+    const sizes = new Float32Array(count);
 
     for (let i = 0; i < count; i++) {
       const i3 = i * 3;
@@ -38,51 +38,50 @@ export function ParticleField() {
       positions[i3] = radius * Math.sin(phi) * Math.cos(theta);
       positions[i3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
       positions[i3 + 2] = radius * Math.cos(phi);
+
+      // Varied particle sizes for depth
+      sizes[i] = Math.random() * 0.5 + 0.5;
     }
 
-    return positions;
+    return { positions, sizes };
   }, [count]);
 
-  // Create particle material
+  // Create buffer geometry with positions
+  const geometry = useMemo(() => {
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    return geo;
+  }, [positions, sizes]);
+
+  // Create enhanced particle material with Neural Network theme
   const material = useMemo(
     () =>
       new THREE.PointsMaterial({
-        size: 0.05,
-        color: '#60a5fa',
+        size: 0.1, // Larger, more visible particles
+        color: '#a855f7', // Purple glow color
         transparent: true,
-        opacity: 0.6,
+        opacity: 0.8, // More visible
         blending: THREE.AdditiveBlending,
         sizeAttenuation: true,
       }),
     []
   );
 
-  // Animate particles
+  // Animate particles with enhanced motion
   useFrame((state) => {
     if (pointsRef.current) {
-      // Gentle rotation
-      pointsRef.current.rotation.y += 0.0005;
-      pointsRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.1) * 0.1;
+      const time = state.clock.elapsedTime;
 
-      // Mouse interaction
-      const mouseX = (state.mouse.x * Math.PI) / 10;
-      const mouseY = (state.mouse.y * Math.PI) / 10;
+      // Smooth rotation
+      pointsRef.current.rotation.y = time * 0.05;
+      pointsRef.current.rotation.x = Math.sin(time * 0.1) * 0.15;
 
-      pointsRef.current.rotation.y += mouseX * 0.001;
-      pointsRef.current.rotation.x += mouseY * 0.001;
+      // Subtle pulsing scale effect
+      const pulse = 1 + Math.sin(time * 0.5) * 0.02;
+      pointsRef.current.scale.setScalar(pulse);
     }
   });
 
-  return (
-    <points ref={pointsRef} material={material}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={positions.length / 3}
-          array={positions}
-          itemSize={3}
-        />
-      </bufferGeometry>
-    </points>
-  );
+  return <points ref={pointsRef} geometry={geometry} material={material} />;
 }
