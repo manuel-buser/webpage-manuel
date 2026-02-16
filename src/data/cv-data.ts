@@ -1,7 +1,7 @@
 export const personalInfo = {
   name: 'Manuel Buser',
   title: 'AI Engineer',
-  subtitle: 'Conversational AI & Data Science Specialist',
+  subtitle: 'Full Stack Developer',
   dateOfBirth: '30.05.1999',
   nationality: 'CH',
   address: 'Davidsbodenstrasse 30, 4056 Basel, Switzerland',

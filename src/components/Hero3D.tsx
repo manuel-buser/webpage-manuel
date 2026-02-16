@@ -92,27 +92,6 @@ export function Hero3D() {
           </motion.p>
 
           {/* CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 1.3 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-          >
-            <Link
-              href="/projects"
-              className="group relative px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-2xl hover:shadow-primary/25 hover:-translate-y-0.5 overflow-hidden"
-            >
-              <span className="relative z-10">View My Work</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-secondary to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </Link>
-            <Link
-              href="/contact"
-              className="px-8 py-4 bg-transparent border-2 border-primary/50 text-foreground rounded-xl font-semibold hover:border-primary hover:bg-primary/10 transition-all duration-300 backdrop-blur-sm"
-            >
-              Get In Touch
-            </Link>
-          </motion.div>
-
           {/* Social Links */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -155,7 +134,7 @@ export function Hero3D() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+          className="absolute bottom-2 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         >
           <span className="text-xs text-foreground/40 uppercase tracking-widest">Scroll</span>
           <ChevronDown className="w-6 h-6 text-foreground/50 animate-bounce" />
