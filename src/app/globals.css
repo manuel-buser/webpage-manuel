@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  /* Light mode - "Neural Network" theme */
-  --background: #fafbfc;
-  --foreground: #0f172a;
-  --primary: #6366f1;
-  --secondary: #8b5cf6;
+  /* Dark mode - "Neural Network" theme (always active) */
+  --background: #0c0a14;
+  --foreground: #f1f5f9;
+  --primary: #818cf8;
+  --secondary: #a78bfa;
   --accent: #22d3ee;
-  --muted: #f1f5f9;
-  --border: #e2e8f0;
+  --muted: #1e1b2e;
+  --border: #2d2a3e;
   --glow: #a855f7;
-  --surface: #ffffff;
+  --surface: #13111c;
 }
 
 @theme inline {
@@ -46,20 +46,6 @@
   --animate-float: float 6s ease-in-out infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Dark mode - "Neural Network" theme */
-    --background: #0c0a14;
-    --foreground: #f1f5f9;
-    --primary: #818cf8;
-    --secondary: #a78bfa;
-    --accent: #22d3ee;
-    --muted: #1e1b2e;
-    --border: #2d2a3e;
-    --glow: #a855f7;
-    --surface: #13111c;
-  }
-}
 
 /* Custom Animations */
 @keyframes fade-in {

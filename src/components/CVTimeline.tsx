@@ -1,12 +1,20 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { experiences, education } from '@/data/cv-data';
 import { TimelineItem } from './TimelineItem';
 import { animateProgressLine } from '@/lib/animations/gsap-utils';
+import { Scene } from '@/lib/three/Scene';
+import { NetworkNodes } from '@/lib/three/TimelineBackground';
+import { supportsWebGL } from '@/lib/utils';
 
 export function CVTimeline() {
   const lineRef = useRef<HTMLDivElement>(null);
+  const [hasWebGL, setHasWebGL] = useState(true);
+
+  useEffect(() => {
+    setHasWebGL(supportsWebGL());
+  }, []);
 
   useEffect(() => {
     if (lineRef.current) {
@@ -14,16 +22,33 @@ export function CVTimeline() {
     }
   }, []);
 
-  // Combine and sort by date (most recent first)
-  const allItems = [...experiences, ...education].sort((a, b) => {
-    const dateA = a.endDate === 'present' ? new Date() : new Date(a.endDate);
-    const dateB = b.endDate === 'present' ? new Date() : new Date(b.endDate);
-    return dateB.getTime() - dateA.getTime();
-  });
+  // Sort each section by date (most recent first)
+  const sortByDate = (items: typeof experiences) =>
+    [...items].sort((a, b) => {
+      const dateA = a.endDate === 'present' ? new Date() : new Date(a.endDate);
+      const dateB = b.endDate === 'present' ? new Date() : new Date(b.endDate);
+      return dateB.getTime() - dateA.getTime();
+    });
+
+  const sortedExperiences = sortByDate(experiences);
+  const sortedEducation = sortByDate(education);
 
   return (
-    <section className="min-h-screen bg-background py-24 px-6 sm:px-8 lg:px-10">
-      <div className="max-w-6xl mx-auto">
+    <section className="relative min-h-screen py-24 px-6 sm:px-8 lg:px-10 overflow-hidden">
+      {/* 3D Background */}
+      {hasWebGL && (
+        <div className="absolute inset-0 z-0">
+          <Scene camera={{ position: [0, 0, 8], fov: 60 }}>
+            <NetworkNodes />
+          </Scene>
+        </div>
+      )}
+
+      {/* Gradient overlay for readability */}
+      <div className="absolute inset-0 bg-background/60 z-[1]" />
+
+      {/* Content */}
+      <div className="relative z-[2] max-w-6xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-16 sm:mb-20">
           <p className="text-xs sm:text-sm font-semibold text-primary uppercase tracking-widest mb-3 sm:mb-4">
@@ -37,27 +62,46 @@ export function CVTimeline() {
           </p>
         </div>
 
-        {/* Timeline */}
-        <div className="relative">
-          {/* Vertical Line - Desktop with glow */}
-          <div
-            ref={lineRef}
-            className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-secondary to-accent hidden md:block shadow-[0_0_10px_rgba(99,102,241,0.5)]"
-          />
+        {/* Work Experience Section */}
+        <div className="mb-16 sm:mb-20">
+          <h3 className="text-2xl sm:text-3xl font-bold text-primary mb-10 flex items-center gap-3">
+            <span className="w-10 h-0.5 bg-gradient-to-r from-primary to-transparent" />
+            Work Experience
+          </h3>
+          <div className="relative">
+            <div
+              ref={lineRef}
+              className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-secondary to-accent shadow-[0_0_10px_rgba(99,102,241,0.5)]"
+            />
+            <div className="space-y-12">
+              {sortedExperiences.map((item, index) => (
+                <TimelineItem
+                  key={item.id}
+                  item={item}
+                  index={index}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
 
-          {/* Vertical Line - Mobile with glow */}
-          <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-secondary to-accent md:hidden shadow-[0_0_8px_rgba(99,102,241,0.4)]" />
-
-          {/* Timeline Items */}
-          <div className="space-y-12">
-            {allItems.map((item, index) => (
-              <TimelineItem
-                key={item.id}
-                item={item}
-                index={index}
-                isLeft={index % 2 === 0}
-              />
-            ))}
+        {/* Education Section */}
+        <div>
+          <h3 className="text-2xl sm:text-3xl font-bold text-secondary mb-10 flex items-center gap-3">
+            <span className="w-10 h-0.5 bg-gradient-to-r from-secondary to-transparent" />
+            Education
+          </h3>
+          <div className="relative">
+            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-secondary via-accent to-transparent shadow-[0_0_10px_rgba(139,92,246,0.5)]" />
+            <div className="space-y-12">
+              {sortedEducation.map((item, index) => (
+                <TimelineItem
+                  key={item.id}
+                  item={item}
+                  index={index}
+                />
+              ))}
+            </div>
           </div>
         </div>
 

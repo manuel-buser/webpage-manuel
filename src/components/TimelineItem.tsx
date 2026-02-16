@@ -2,35 +2,23 @@
 
 import { useEffect, useRef } from 'react';
 import type { Experience } from '@/data/cv-data';
-import { slideInLeft, slideInRight } from '@/lib/animations/gsap-utils';
+import { slideInRight } from '@/lib/animations/gsap-utils';
 import { Briefcase, GraduationCap } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Timeline3DAnimation } from './Timeline3DAnimation';
 
 interface TimelineItemProps {
   item: Experience;
   index: number;
-  isLeft: boolean;
 }
 
-export function TimelineItem({ item, index, isLeft }: TimelineItemProps) {
+export function TimelineItem({ item, index }: TimelineItemProps) {
   const itemRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (itemRef.current) {
-      // Animate from left or right based on desktop position
-      // On mobile, always animate from right
-      if (window.innerWidth >= 768) {
-        if (isLeft) {
-          slideInLeft(itemRef.current, { delay: 0.1 * index });
-        } else {
-          slideInRight(itemRef.current, { delay: 0.1 * index });
-        }
-      } else {
-        slideInRight(itemRef.current, { delay: 0.1 * index });
-      }
+      slideInRight(itemRef.current, { delay: 0.1 * index });
     }
-  }, [isLeft, index]);
+  }, [index]);
 
   const isWork = item.type === 'work';
   const Icon = isWork ? Briefcase : GraduationCap;
@@ -38,15 +26,12 @@ export function TimelineItem({ item, index, isLeft }: TimelineItemProps) {
   return (
     <div
       ref={itemRef}
-      className={cn(
-        'relative flex items-center mb-8 md:mb-12 opacity-0',
-        isLeft ? 'md:justify-end' : 'md:justify-start'
-      )}
+      className="relative flex items-center mb-8 md:mb-12 opacity-0"
     >
-      {/* Timeline Dot - Desktop (centered) with glow effect */}
+      {/* Timeline Dot (left side) with glow effect */}
       <div
         className={cn(
-          'absolute left-1/2 -translate-x-1/2 hidden md:flex items-center justify-center w-16 h-16 rounded-full bg-surface border-4 z-10 transition-all duration-300',
+          'absolute left-8 -translate-x-1/2 flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-full bg-surface border-4 z-10 transition-all duration-300',
           isWork
             ? 'border-primary shadow-[0_0_20px_rgba(99,102,241,0.4),0_0_40px_rgba(99,102,241,0.2)]'
             : 'border-secondary shadow-[0_0_20px_rgba(139,92,246,0.4),0_0_40px_rgba(139,92,246,0.2)]',
@@ -54,32 +39,12 @@ export function TimelineItem({ item, index, isLeft }: TimelineItemProps) {
         )}
       >
         <Icon
-          className={cn('w-7 h-7', isWork ? 'text-primary' : 'text-secondary')}
+          className={cn('w-5 h-5 md:w-7 md:h-7', isWork ? 'text-primary' : 'text-secondary')}
         />
       </div>
 
-      {/* Timeline Dot - Mobile (left side) with glow effect */}
-      <div
-        className={cn(
-          'absolute left-8 -translate-x-1/2 md:hidden flex items-center justify-center w-12 h-12 rounded-full bg-surface border-4 z-10 transition-all duration-300',
-          isWork
-            ? 'border-primary shadow-[0_0_15px_rgba(99,102,241,0.4),0_0_30px_rgba(99,102,241,0.2)]'
-            : 'border-secondary shadow-[0_0_15px_rgba(139,92,246,0.4),0_0_30px_rgba(139,92,246,0.2)]',
-          item.endDate === 'present' && 'animate-pulse'
-        )}
-      >
-        <Icon
-          className={cn('w-5 h-5', isWork ? 'text-primary' : 'text-secondary')}
-        />
-      </div>
-
-      {/* Content Card */}
-      <div
-        className={cn(
-          'w-full md:w-[calc(50%-4rem)] ml-16 md:ml-0',
-          isLeft ? 'md:mr-20' : 'md:ml-20'
-        )}
-      >
+      {/* Content Card - always on the right */}
+      <div className="w-full ml-20">
         <div
           className={cn(
             'rounded-2xl p-4 sm:p-6 md:p-8 transition-all duration-300 border backdrop-blur-sm group',
@@ -188,18 +153,6 @@ export function TimelineItem({ item, index, isLeft }: TimelineItemProps) {
           )}
         </div>
       </div>
-
-      {/* 3D Animation - Desktop only, opposite side, work only */}
-      {isWork && (
-        <div
-          className={cn(
-            'hidden md:block absolute w-72 h-64',
-            isLeft ? 'right-[calc(50%+3rem)]' : 'left-[calc(50%+3rem)]'
-          )}
-        >
-          <Timeline3DAnimation item={item} className="w-full h-full" />
-        </div>
-      )}
     </div>
   );
 }
