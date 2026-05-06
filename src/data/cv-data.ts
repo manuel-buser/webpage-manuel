@@ -179,18 +179,7 @@ export const education: Experience[] = [
     endDate: 'present',
     type: 'education',
     summary: 'M.Sc. with a Machine Intelligence specialization, focused on deep learning, ML, and applied AI research.',
-    description: [
-      'Machine Intelligence major covering deep learning, machine learning, and optimization',
-      'Affiliated with the AI research group at the Department of Mathematics and Computer Science',
-      '90 ECTS programme concluding with a 6-month Master\'s thesis',
-    ],
-    technologies: [
-      'Deep Learning',
-      'Machine Learning',
-      'NLP',
-      'Python',
-      'PyTorch',
-    ],
+    description: [],
   },
   {
     id: 'bachelor-bit',
@@ -202,19 +191,7 @@ export const education: Experience[] = [
     endDate: '2024-08',
     type: 'education',
     summary: 'BSc in Business Information Technology with a Software Engineering Leadership specialization. Graduated top of class with the 2024 Diploma Award.',
-    description: [
-      'Diploma Award 2024 for best GPA in the cohort (final grade 5.35 / 6)',
-      'Specialization: Software Engineering Leadership',
-      '180 ECTS programme bridging business and software engineering, taught in English',
-    ],
-    technologies: [
-      'Software Engineering',
-      'Software Architecture',
-      'Python',
-      'Machine Learning',
-      'SQL',
-      'Agile',
-    ],
+    description: [],
   },
 ];
 
