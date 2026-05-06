@@ -11,8 +11,7 @@ concurrency:
 
 env:
   HETZNER_HOST: 91.99.204.182
-  HETZNER_USER: root
-  HETZNER_PATH: /var/www/manuel-buser.com
+  HETZNER_USER: deploy
 
 jobs:
   build-and-deploy:
@@ -47,6 +46,8 @@ jobs:
 
       - name: Rsync build output to VPS
         run: |
+          # rrsync on the server side hardcodes the destination path
+          # to /var/www/manuel-buser.com, so we just rsync to "./".
           rsync -avz --delete \
             -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes" \
-            out/ "$HETZNER_USER@$HETZNER_HOST:$HETZNER_PATH/"
+            out/ "$HETZNER_USER@$HETZNER_HOST:./"
