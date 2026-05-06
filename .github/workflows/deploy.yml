@@ -40,8 +40,14 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.HETZNER_SSH_KEY }}
         run: |
           mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          # Strip CR characters (in case the secret was pasted with CRLF line
+          # endings from a Windows terminal) and ensure a single trailing LF.
+          # Without this, OpenSSH rejects the key with "error in libcrypto".
+          printf '%s\n' "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
+          # Validate the key parses before we try to use it — fails loudly here
+          # rather than silently as a confusing "Permission denied" later.
+          ssh-keygen -y -f ~/.ssh/deploy_key > /dev/null
           ssh-keyscan -H "$HETZNER_HOST" >> ~/.ssh/known_hosts
 
       - name: Rsync build output to VPS
