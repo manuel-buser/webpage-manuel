@@ -69,7 +69,7 @@ export default function ProjectsPage() {
             transition={{ duration: 0.8, ease: 'easeOut' }}
           >
             <motion.h1
-              className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent mb-6"
+              className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent mb-6 bg-[length:200%_200%] text-balance"
               animate={{
                 backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
               }}
@@ -78,7 +78,6 @@ export default function ProjectsPage() {
                 repeat: Infinity,
                 ease: 'linear',
               }}
-              style={{ backgroundSize: '200% 200%' }}
             >
               Coming Soon
             </motion.h1>

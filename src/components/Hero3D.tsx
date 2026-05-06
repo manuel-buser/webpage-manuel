@@ -1,14 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
-import { ChevronDown, Github, Linkedin, Mail } from 'lucide-react';
-import { Scene } from '@/lib/three/Scene';
-import { AnimatedSphere } from '@/lib/three/AnimatedSphere';
-import { ParticleField } from '@/lib/three/ParticleField';
+import { Github, Linkedin, Mail } from 'lucide-react';
 import { supportsWebGL } from '@/lib/utils';
-import { personalInfo, profile } from '@/data/cv-data';
+import { personalInfo, tagline } from '@/data/cv-data';
+
+const HeroScene = dynamic(() => import('./HeroScene'), {
+  ssr: false,
+  loading: () => null,
+});
 
 export function Hero3D() {
   const [hasWebGL, setHasWebGL] = useState(true);
@@ -37,13 +39,10 @@ export function Hero3D() {
 
   return (
     <section className="relative h-screen w-full overflow-hidden">
-      {/* 3D Background */}
+      {/* 3D Background (lazy-loaded) */}
       {hasWebGL && (
         <div className="absolute inset-0 z-0">
-          <Scene camera={{ position: [0, 0, 6], fov: 75 }}>
-            <AnimatedSphere position={[0, 0, 0]} scale={2} />
-            <ParticleField />
-          </Scene>
+          <HeroScene />
         </div>
       )}
 
@@ -63,7 +62,7 @@ export function Hero3D() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 tracking-tight"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 tracking-tight text-balance"
           >
             <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent drop-shadow-sm">
               Manuel Buser
@@ -81,14 +80,14 @@ export function Hero3D() {
             <span className="animate-pulse text-primary">|</span>
           </motion.h2>
 
-          {/* Description */}
+          {/* Tagline */}
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 1 }}
-            className="text-base sm:text-lg md:text-xl text-foreground/70 mb-12 max-w-3xl mx-auto leading-relaxed px-2"
+            className="text-base sm:text-lg md:text-xl text-foreground/70 mb-12 max-w-2xl mx-auto leading-relaxed px-2 text-balance"
           >
-            {profile}
+            {tagline}
           </motion.p>
 
           {/* CTA Buttons */}
@@ -129,16 +128,6 @@ export function Hero3D() {
           </motion.div>
         </motion.div>
 
-        {/* Scroll Indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 2 }}
-          className="absolute bottom-2 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        >
-          <span className="text-xs text-foreground/40 uppercase tracking-widest">Scroll</span>
-          <ChevronDown className="w-6 h-6 text-foreground/50 animate-bounce" />
-        </motion.div>
       </div>
     </section>
   );

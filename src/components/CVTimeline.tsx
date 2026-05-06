@@ -1,19 +1,41 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { Download } from 'lucide-react';
 import { experiences, education } from '@/data/cv-data';
 import { TimelineItem } from './TimelineItem';
+import { Button } from './ui/Button';
 import { animateProgressLine } from '@/lib/animations/gsap-utils';
-import { Scene } from '@/lib/three/Scene';
-import { NetworkNodes } from '@/lib/three/TimelineBackground';
 import { supportsWebGL } from '@/lib/utils';
 
+const TimelineScene = dynamic(() => import('./TimelineScene'), {
+  ssr: false,
+  loading: () => null,
+});
+
 export function CVTimeline() {
+  const sectionRef = useRef<HTMLElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
-  const [hasWebGL, setHasWebGL] = useState(true);
+  const [hasWebGL, setHasWebGL] = useState(false);
+  const [sceneVisible, setSceneVisible] = useState(false);
 
   useEffect(() => {
-    setHasWebGL(supportsWebGL());
+    if (!supportsWebGL() || !sectionRef.current) return;
+    setHasWebGL(true);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          setSceneVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '400px' }
+    );
+
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -34,13 +56,15 @@ export function CVTimeline() {
   const sortedEducation = sortByDate(education);
 
   return (
-    <section className="relative min-h-screen py-24 px-6 sm:px-8 lg:px-10 overflow-hidden">
-      {/* 3D Background */}
-      {hasWebGL && (
+    <section
+      id="career"
+      ref={sectionRef}
+      className="relative min-h-screen py-24 px-6 sm:px-8 lg:px-10 overflow-hidden scroll-mt-20"
+    >
+      {/* 3D Background (lazy-loaded, mounted when section nears viewport) */}
+      {hasWebGL && sceneVisible && (
         <div className="absolute inset-0 z-0">
-          <Scene camera={{ position: [0, 0, 8], fov: 60 }}>
-            <NetworkNodes />
-          </Scene>
+          <TimelineScene />
         </div>
       )}
 
@@ -54,11 +78,11 @@ export function CVTimeline() {
           <p className="text-xs sm:text-sm font-semibold text-primary uppercase tracking-widest mb-3 sm:mb-4">
             Career Journey
           </p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4 sm:mb-6 tracking-tight px-2">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4 sm:mb-6 tracking-tight px-2 text-balance">
             Experience & Education
           </h2>
           <p className="text-base sm:text-lg text-foreground/70 max-w-2xl mx-auto leading-relaxed px-2">
-            From banking to AI engineering — building intelligent systems that bridge technical innovation with real-world business impact.
+            From banking to AI engineering. Building intelligent systems that bridge technical innovation with real-world business impact.
           </p>
         </div>
 
@@ -107,29 +131,10 @@ export function CVTimeline() {
 
         {/* Download CV Button */}
         <div className="text-center mt-20">
-          <a
-            href="/resume.pdf"
-            download
-            className="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-2xl hover:shadow-primary/25 hover:-translate-y-0.5 overflow-hidden relative"
-          >
-            <span className="relative z-10 flex items-center gap-3">
-              <svg
-                className="w-5 h-5 transition-transform group-hover:-translate-y-0.5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
-              Download Full CV
-            </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-secondary to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </a>
+          <Button href="/resume.pdf" download size="lg" className="group">
+            <Download className="w-5 h-5 transition-transform group-hover:-translate-y-0.5" />
+            Download Full CV
+          </Button>
         </div>
       </div>
     </section>

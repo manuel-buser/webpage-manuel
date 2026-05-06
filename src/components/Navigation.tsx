@@ -6,9 +6,11 @@ import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { buttonVariants } from './ui/Button';
 
 const navItems = [
   { name: 'Home', href: '/' },
+  { name: 'Career', href: '/#career' },
   { name: 'Projects', href: '/projects' },
 ];
 
@@ -85,7 +87,7 @@ export function Navigation() {
             {/* CTA Button */}
             <Link
               href="/contact"
-              className="ml-4 px-5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-primary to-secondary rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-primary/25 hover:-translate-y-0.5"
+              className={cn(buttonVariants({ size: 'sm' }), 'ml-4')}
             >
               Hire Me
             </Link>
@@ -147,7 +149,7 @@ export function Navigation() {
               >
                 <Link
                   href="/contact"
-                  className="block px-4 py-3 text-center text-base font-semibold text-white bg-gradient-to-r from-primary to-secondary rounded-xl shadow-lg shadow-primary/25"
+                  className={cn(buttonVariants({ size: 'md', fullWidth: true }))}
                 >
                   Hire Me
                 </Link>

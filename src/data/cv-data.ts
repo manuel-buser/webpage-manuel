@@ -11,6 +11,8 @@ export const personalInfo = {
   github: 'https://github.com/manuel-buser', // Update with actual if exists
 };
 
+export const tagline = `Building AI systems that go beyond the demo phase. Production-grade, at enterprise scale.`;
+
 export const profile = `AI Engineer with practical experience across data science, conversational AI, and cloud-based system integration. Skilled in developing and deploying end-to-end AI solutions that bridge technical innovation with real-world business impact. Experienced in machine learning, API development, and DevOps practices, with a focus on designing scalable, data-driven architectures that enhance automation and decision-making.`;
 
 export const skills = {
@@ -83,6 +85,7 @@ export interface Experience {
   period: string;
   startDate: string;
   endDate: string;
+  summary: string;
   description: string[];
   type: 'work' | 'education';
   technologies?: string[];
@@ -98,6 +101,7 @@ export const experiences: Experience[] = [
     startDate: '2025-08',
     endDate: 'present',
     type: 'work',
+    summary: 'Building enterprise voice AI agents on Parloa handling 500K+ calls/year, with cloud-native backends on OpenShift.',
     description: [
       'Conversational AI & Platform Engineering: Drive technical implementation of enterprise-scale AI voice agents on Parloa, managing 500,000+ calls/year (doubling through Helvetia–Baloise merger). Design complex conversation architectures, specialized Prompt Engineering, and RAG pipelines. Build automated testing infrastructures using simulation and evaluation agents to validate dialog flows and NLU performance at scale.',
       'Cloud-Native Backend & DevOps: Develop scalable microservices (Java/Quarkus, Python) on OpenShift. Implement API interfaces and business logic as deterministic services. Manage full deployment lifecycle via GitOps-based CI/CD with ArgoCD. Integrate and manage API interfaces on central Integration Platform (HIP) using declarative YAML for standardized delivery.',
@@ -128,6 +132,7 @@ export const experiences: Experience[] = [
     startDate: '2023-10',
     endDate: '2025-07',
     type: 'work',
+    summary: 'Owned data quality for core systems; built dashboards, address verification, and customer-deduplication automation.',
     description: [
       'Advanced from Working Student to Data Scientist, responsible for ensuring data quality of Helvetia\'s core systems',
       'Planned and developed data quality dashboard prototype using SAS Enterprise Guide and SAS Visual Analytics',
@@ -154,10 +159,11 @@ export const experiences: Experience[] = [
     startDate: '2018-12',
     endDate: '2023-09',
     type: 'work',
+    summary: 'Banking and client consulting roles that gave me a strong business foundation. I still rely on it in IT to always understand the business side.',
     description: [
       'Held multiple positions including internship and client consulting roles',
       'Gained foundational experience in banking, business processes, and client communication',
-      'Supported transition into data and AI roles',
+      'Built the business intuition I still draw on as an engineer, so technical work always stays grounded in real business context',
     ],
   },
 ];
@@ -165,47 +171,58 @@ export const experiences: Experience[] = [
 export const education: Experience[] = [
   {
     id: 'master-cs',
-    title: 'Computer Science (Machine Intelligence)',
-    company: 'University of Basel - Department of Mathematics and Informatics',
+    title: 'M.Sc. Computer Science (Machine Intelligence)',
+    company: 'University of Basel, Department of Mathematics and Computer Science',
     location: 'Basel, Switzerland',
     period: 'September 2024 - Present',
     startDate: '2024-09',
     endDate: 'present',
     type: 'education',
-    description: ['Master\'s program in Computer Science with focus on Machine Intelligence'],
+    summary: 'M.Sc. with Machine Intelligence specialization, focused on deep learning, planning & optimization, and applied AI research.',
+    description: [
+      '90 ECTS programme with a Machine Intelligence major chosen over Distributed Systems',
+      'Core coursework: Foundations of Deep Learning, Machine Learning, Planning & Optimization, Continuous Optimization, Seminar Scientific Writing',
+      'Affiliated with the Artificial Intelligence research group at the Section of Computer Science',
+      'Concludes with a 6-month Master\'s thesis (30 ECTS) on an applied AI / ML topic',
+    ],
+    technologies: [
+      'Deep Learning',
+      'Machine Learning',
+      'NLP',
+      'Optimization',
+      'Research',
+      'Python',
+      'PyTorch',
+    ],
   },
   {
     id: 'bachelor-bit',
-    title: 'Business Information Technology',
-    company: 'FHNW',
+    title: 'BSc Business Information Technology (Software Engineering Leadership)',
+    company: 'FHNW, University of Applied Sciences and Arts Northwestern Switzerland',
     location: 'Basel, Switzerland',
     period: 'September 2021 - August 2024',
     startDate: '2021-09',
     endDate: '2024-08',
     type: 'education',
-    description: ['Bachelor Program in English at FHNW'],
-  },
-  {
-    id: 'ef-london',
-    title: 'English Language Exchange',
-    company: 'EF Education First',
-    location: 'London, UK',
-    period: 'June 2021 - July 2021',
-    startDate: '2021-06',
-    endDate: '2021-07',
-    type: 'education',
-    description: ['Language exchange as preparation for Bachelor Program'],
-  },
-  {
-    id: 'vocational',
-    title: 'Swiss Federal Vocational Baccalaureate',
-    company: 'kvBL',
-    location: 'Liestal, Switzerland',
-    period: 'August 2015 - July 2018',
-    startDate: '2015-08',
-    endDate: '2018-07',
-    type: 'education',
-    description: ['Business school for obtaining the vocational baccalaureate'],
+    summary: 'BSc in Business Information Technology with Software Engineering Leadership. Graduated top of class with the 2024 Diploma Award (GPA 5.35 / 6).',
+    description: [
+      'Diploma Award 2024 for the best grade-point average in the Business Information Technology cohort (final grade 5.35, weighted average 5.3)',
+      'Specialization: Software Engineering Leadership (software architecture, software engineering, agile lifecycle management)',
+      'Bachelor thesis: "Data Quality Reporting Dashboard" (graded 5.5), directly tied to my early data-quality work at Helvetia',
+      'Technical core: Programming, Database Technology, Internet Technology, IT-Security, Machine Learning with Python, Time Series Analysis with R, Conversational AI (Virtual Assistants & Chatbots)',
+      'Business core: Corporate Finance, Accounting, Business Process Management, Enterprise Systems, Business Intelligence, Project Management',
+      '180 ECTS programme taught fully in English',
+    ],
+    technologies: [
+      'Software Engineering',
+      'Software Architecture',
+      'Python',
+      'R',
+      'Machine Learning',
+      'Conversational AI',
+      'SQL',
+      'Agile',
+    ],
   },
 ];
 

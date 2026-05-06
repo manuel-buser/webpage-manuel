@@ -37,10 +37,10 @@ export function prefersReducedMotion(): boolean {
  * Get responsive particle count based on screen width
  */
 export function getParticleCount(): number {
-  if (typeof window === 'undefined') return 1000;
+  if (typeof window === 'undefined') return 500;
 
   const width = window.innerWidth;
-  if (width < 640) return 500;  // Mobile
-  if (width < 1024) return 1000; // Tablet
-  return 1500; // Desktop
+  if (width < 640) return 300;  // Mobile
+  if (width < 1024) return 500; // Tablet
+  return 600; // Desktop
 }

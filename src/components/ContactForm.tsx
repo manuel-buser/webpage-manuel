@@ -2,6 +2,11 @@
 
 import { useState, FormEvent } from 'react';
 import { motion } from 'framer-motion';
+import { Check } from 'lucide-react';
+import { Button } from './ui/Button';
+
+const FORM_ENDPOINT = 'https://api.web3forms.com/submit';
+const FORM_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? '';
 
 export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -14,12 +19,15 @@ export function ContactForm() {
     setError('');
 
     const form = e.currentTarget;
-    const formData = new FormData(form);
+    const payload = new FormData(form);
+    payload.append('access_key', FORM_KEY);
+    payload.append('subject', 'New Project Inquiry from Portfolio');
+    payload.append('from_name', 'Portfolio Contact Form');
 
     try {
-      const response = await fetch('https://api.web3forms.com/submit', {
+      const response = await fetch(FORM_ENDPOINT, {
         method: 'POST',
-        body: formData,
+        body: payload,
       });
 
       const data = await response.json();
@@ -44,30 +52,20 @@ export function ContactForm() {
         animate={{ opacity: 1, scale: 1 }}
         className="text-center py-16"
       >
-        <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-green-500/20 flex items-center justify-center">
-          <svg className="w-8 h-8 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
+        <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-accent/15 flex items-center justify-center">
+          <Check className="w-8 h-8 text-accent" />
         </div>
         <h3 className="text-2xl font-bold text-foreground mb-2">Message Sent!</h3>
         <p className="text-foreground/60 mb-8">Thank you for reaching out. I&apos;ll get back to you soon.</p>
-        <button
-          onClick={() => setIsSubmitted(false)}
-          className="px-6 py-3 bg-primary/20 text-primary rounded-xl hover:bg-primary/30 transition-colors"
-        >
+        <Button variant="ghost" onClick={() => setIsSubmitted(false)}>
           Send Another Message
-        </button>
+        </Button>
       </motion.div>
     );
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Replace with your Web3Forms access key */}
-      <input type="hidden" name="access_key" value="8c73822b-c06e-4ebc-a57e-84249f0d8d3e" />
-      <input type="hidden" name="subject" value="New Project Inquiry from Portfolio" />
-      <input type="hidden" name="from_name" value="Portfolio Contact Form" />
-
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-foreground/70 mb-2">
@@ -198,13 +196,9 @@ export function ContactForm() {
         <p className="text-red-400 text-sm">{error}</p>
       )}
 
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="w-full py-4 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-primary/25 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
-      >
+      <Button type="submit" size="lg" fullWidth disabled={isSubmitting}>
         {isSubmitting ? 'Sending...' : 'Send Message'}
-      </button>
+      </Button>
     </form>
   );
 }

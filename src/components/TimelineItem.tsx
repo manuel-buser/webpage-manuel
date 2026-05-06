@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Briefcase, ChevronDown, GraduationCap, MapPin } from 'lucide-react';
 import type { Experience } from '@/data/cv-data';
 import { slideInRight } from '@/lib/animations/gsap-utils';
-import { Briefcase, GraduationCap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface TimelineItemProps {
@@ -13,6 +14,8 @@ interface TimelineItemProps {
 
 export function TimelineItem({ item, index }: TimelineItemProps) {
   const itemRef = useRef<HTMLDivElement>(null);
+  const isCurrent = item.endDate === 'present';
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     if (itemRef.current) {
@@ -22,6 +25,8 @@ export function TimelineItem({ item, index }: TimelineItemProps) {
 
   const isWork = item.type === 'work';
   const Icon = isWork ? Briefcase : GraduationCap;
+  const accentClass = isWork ? 'text-primary' : 'text-secondary';
+  const hasDetails = item.description.length > 0 || (item.technologies?.length ?? 0) > 0;
 
   return (
     <div
@@ -35,12 +40,10 @@ export function TimelineItem({ item, index }: TimelineItemProps) {
           isWork
             ? 'border-primary shadow-[0_0_20px_rgba(99,102,241,0.4),0_0_40px_rgba(99,102,241,0.2)]'
             : 'border-secondary shadow-[0_0_20px_rgba(139,92,246,0.4),0_0_40px_rgba(139,92,246,0.2)]',
-          item.endDate === 'present' && 'animate-pulse'
+          isCurrent && 'animate-pulse'
         )}
       >
-        <Icon
-          className={cn('w-5 h-5 md:w-7 md:h-7', isWork ? 'text-primary' : 'text-secondary')}
-        />
+        <Icon className={cn('w-5 h-5 md:w-7 md:h-7', accentClass)} />
       </div>
 
       {/* Content Card - always on the right */}
@@ -54,102 +57,112 @@ export function TimelineItem({ item, index }: TimelineItemProps) {
               : 'bg-gradient-to-br from-secondary/10 via-secondary/5 to-transparent border-secondary/30 hover:border-secondary/50 hover:shadow-[0_8px_30px_rgba(139,92,246,0.15)]'
           )}
         >
-          {/* Badge Row */}
-          <div className="flex flex-wrap items-center gap-3 mb-5">
-            {/* Type Badge */}
-            <div
-              className={cn(
-                'inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl',
-                isWork
-                  ? 'bg-primary/20 text-primary'
-                  : 'bg-secondary/20 text-secondary'
-              )}
-            >
-              {isWork ? (
-                <>
-                  <Briefcase className="w-4 h-4" />
-                  <span>Work Experience</span>
-                </>
-              ) : (
-                <>
-                  <GraduationCap className="w-4 h-4" />
-                  <span>Education</span>
-                </>
-              )}
-            </div>
-
-            {/* Period Badge */}
-            <div
-              className={cn(
-                'inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-lg',
-                'bg-muted/80 text-foreground/70'
-              )}
-            >
-              {item.period}
-            </div>
-
-            {/* Current indicator */}
-            {item.endDate === 'present' && (
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-accent/20 text-accent">
-                <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-                Current
-              </div>
+          {/* Title row with current pulse */}
+          <div className="flex items-start justify-between gap-4 mb-2">
+            <h3 className="text-xl sm:text-2xl font-bold text-foreground leading-tight tracking-tight text-balance">
+              {item.title}
+            </h3>
+            {isCurrent && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full bg-accent/15 text-accent flex-shrink-0">
+                <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                Now
+              </span>
             )}
           </div>
 
-          {/* Title & Company */}
-          <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-2 leading-tight tracking-tight">
-            {item.title}
-          </h3>
-          <h4
-            className={cn(
-              'text-base sm:text-lg font-semibold mb-1',
-              isWork ? 'text-primary' : 'text-secondary'
-            )}
-          >
-            {item.company}
-          </h4>
-          <p className="text-sm text-foreground/60 mb-6 flex items-center gap-1">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
+          {/* Company + period */}
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2">
+            <h4 className={cn('text-base sm:text-lg font-semibold', accentClass)}>
+              {item.company}
+            </h4>
+            <span className="text-xs sm:text-sm text-foreground/50">
+              {item.period}
+            </span>
+          </div>
+
+          {/* Location */}
+          <p className="text-sm text-foreground/60 mb-4 flex items-center gap-1.5">
+            <MapPin className="w-3.5 h-3.5" />
             {item.location}
           </p>
 
-          {/* Description */}
-          <ul className="space-y-2.5 sm:space-y-3 mb-5 sm:mb-6">
-            {item.description.map((desc, i) => (
-              <li key={i} className="text-sm sm:text-base text-foreground/80 flex leading-relaxed">
-                <span
+          {/* Summary teaser — always visible */}
+          <p className="text-sm sm:text-base text-foreground/80 leading-relaxed">
+            {item.summary}
+          </p>
+
+          {/* Expandable details */}
+          {hasDetails && (
+            <>
+              <AnimatePresence initial={false}>
+                {expanded && (
+                  <motion.div
+                    key="details"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    className="overflow-hidden"
+                  >
+                    <ul className="space-y-2.5 sm:space-y-3 mt-5">
+                      {item.description.map((desc, i) => (
+                        <li
+                          key={i}
+                          className="text-sm sm:text-base text-foreground/80 flex leading-relaxed"
+                        >
+                          <span
+                            className={cn(
+                              'mr-2.5 sm:mr-3 mt-1.5 flex-shrink-0 w-1.5 h-1.5 rounded-full',
+                              isWork ? 'bg-primary' : 'bg-secondary'
+                            )}
+                          />
+                          <span>{desc}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {item.technologies && item.technologies.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-5 pt-5 border-t border-border/30">
+                        {item.technologies.map((tech, i) => (
+                          <span
+                            key={i}
+                            className={cn(
+                              'px-3 py-1.5 text-sm font-medium rounded-lg cursor-default',
+                              'transition-all duration-200 hover:scale-105',
+                              isWork
+                                ? 'bg-primary/15 text-primary/90 hover:bg-primary/25'
+                                : 'bg-secondary/15 text-secondary/90 hover:bg-secondary/25'
+                            )}
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <button
+                type="button"
+                onClick={() => setExpanded((v) => !v)}
+                aria-expanded={expanded}
+                className={cn(
+                  'mt-4 inline-flex items-center gap-1.5 text-sm font-medium',
+                  'transition-colors duration-200',
+                  accentClass,
+                  'hover:opacity-80'
+                )}
+              >
+                {expanded ? 'Show less' : 'Read more'}
+                <ChevronDown
                   className={cn(
-                    'mr-2.5 sm:mr-3 mt-1.5 flex-shrink-0 w-1.5 h-1.5 rounded-full',
-                    isWork ? 'bg-primary' : 'bg-secondary'
+                    'w-4 h-4 transition-transform duration-300',
+                    expanded && 'rotate-180'
                   )}
                 />
-                <span>{desc}</span>
-              </li>
-            ))}
-          </ul>
-
-          {/* Technologies */}
-          {item.technologies && item.technologies.length > 0 && (
-            <div className="flex flex-wrap gap-2 pt-5 border-t border-border/30">
-              {item.technologies.map((tech, i) => (
-                <span
-                  key={i}
-                  className={cn(
-                    'px-3 py-1.5 text-sm font-medium rounded-lg cursor-default',
-                    'transition-all duration-200 hover:scale-105',
-                    isWork
-                      ? 'bg-primary/15 text-primary/90 hover:bg-primary/25'
-                      : 'bg-secondary/15 text-secondary/90 hover:bg-secondary/25'
-                  )}
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
+              </button>
+            </>
           )}
         </div>
       </div>
