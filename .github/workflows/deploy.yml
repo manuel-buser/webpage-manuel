@@ -9,6 +9,11 @@ concurrency:
   group: deploy-${{ github.ref }}
   cancel-in-progress: false
 
+env:
+  HETZNER_HOST: 91.99.204.182
+  HETZNER_USER: root
+  HETZNER_PATH: /var/www/manuel-buser.com
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -38,13 +43,9 @@ jobs:
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H ${{ secrets.HETZNER_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H "$HETZNER_HOST" >> ~/.ssh/known_hosts
 
       - name: Rsync build output to VPS
-        env:
-          HETZNER_USER: ${{ secrets.HETZNER_USER }}
-          HETZNER_HOST: ${{ secrets.HETZNER_HOST }}
-          HETZNER_PATH: ${{ secrets.HETZNER_PATH }}
         run: |
           rsync -avz --delete \
             -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes" \

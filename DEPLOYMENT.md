@@ -64,17 +64,18 @@ grep -rli spending /etc/nginx/
 #   systemctl reload nginx
 ```
 
-### 4. On GitHub — add 4 repository secrets
+### 4. On GitHub — add 2 repository secrets
+
+Host / user / docroot are hardcoded in the workflow (they aren't actually secret — the IP is publicly resolvable via DNS). Only the two real secrets need to live in GitHub.
 
 Go to https://github.com/manuel-buser/webpage-manuel/settings/secrets/actions → **New repository secret**.
 
 | Secret name | Value |
 |---|---|
-| `HETZNER_HOST` | `91.99.204.182` |
-| `HETZNER_USER` | `root` |
-| `HETZNER_PATH` | The docroot from step 1 (e.g. `/var/www/manuel-buser.com/html`) |
 | `HETZNER_SSH_KEY` | The full private key from step 2 (entire `-----BEGIN…` to `…END OPENSSH PRIVATE KEY-----` block, including the trailing newline) |
 | `NEXT_PUBLIC_WEB3FORMS_KEY` | The same value that's in your local `.env.local` |
+
+If your VPS IP, user, or docroot ever change, edit the `env:` block at the top of `.github/workflows/deploy.yml`.
 
 ### 5. Push and watch
 
