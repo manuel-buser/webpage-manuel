@@ -35,7 +35,7 @@ const projects: Project[] = [
     description:
       'Rewriting an IPC-2018 Spider Solitaire PDDL domain using derived ' +
       'predicates instead of zero-cost propagation actions. The interactive ' +
-      'presentation includes a live Fast Downward race in your browser — same ' +
+      'presentation includes a live Fast Downward race in your browser, same ' +
       'instance, both encodings, side by side.',
     tags: ['PDDL', 'Fast Downward', 'Classical Planning', 'Derived Predicates'],
     primary: {
@@ -43,7 +43,7 @@ const projects: Project[] = [
       href: 'https://manuel-buser.com/projects/spider-axioms/',
     },
     secondary: {
-      label: 'View source',
+      label: 'View initial project',
       href: 'https://github.com/manuel-buser/Seminar_Knowledge_Reasoning_Planning_Project',
     },
   },
