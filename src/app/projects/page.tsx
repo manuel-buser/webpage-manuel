@@ -1,10 +1,11 @@
 'use client';
 
+import { useState } from 'react';
 import { PageTransition } from '@/components/PageTransition';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
-import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { ArrowRight, Monitor, X } from 'lucide-react';
 
 function GithubIcon({ className }: { className?: string }) {
   return (
@@ -24,9 +25,11 @@ type Project = {
   title: string;
   description: string;
   tags: string[];
-  primary: { label: string; href: string };
+  primary: { label: string; href: string; requiresLargeScreen?: boolean };
   secondary?: { label: string; href: string };
 };
+
+const SMALL_SCREEN_BREAKPOINT = 768;
 
 const projects: Project[] = [
   {
@@ -41,6 +44,7 @@ const projects: Project[] = [
     primary: {
       label: 'Open the presentation',
       href: 'https://manuel-buser.com/projects/spider-axioms/',
+      requiresLargeScreen: true,
     },
     secondary: {
       label: 'View initial project',
@@ -50,6 +54,26 @@ const projects: Project[] = [
 ];
 
 export default function ProjectsPage() {
+  const [pendingHref, setPendingHref] = useState<string | null>(null);
+
+  const handlePrimaryClick = (
+    project: Project,
+    e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>
+  ) => {
+    if (!project.primary.requiresLargeScreen) return;
+    if (typeof window === 'undefined') return;
+    if (window.innerWidth >= SMALL_SCREEN_BREAKPOINT) return;
+    e.preventDefault();
+    setPendingHref(project.primary.href);
+  };
+
+  const closeModal = () => setPendingHref(null);
+
+  const proceed = () => {
+    if (pendingHref) window.location.href = pendingHref;
+    setPendingHref(null);
+  };
+
   return (
     <PageTransition>
       <section className="min-h-screen py-24 sm:py-32 relative overflow-hidden">
@@ -143,6 +167,7 @@ export default function ProjectsPage() {
                       href={project.primary.href}
                       variant="primary"
                       size="lg"
+                      onClick={(e) => handlePrimaryClick(project, e)}
                     >
                       {project.primary.label}
                       <ArrowRight className="w-4 h-4" />
@@ -166,6 +191,79 @@ export default function ProjectsPage() {
           </div>
         </Container>
       </section>
+
+      <AnimatePresence>
+        {pendingHref && (
+          <motion.div
+            key="screen-size-modal"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="screen-size-modal-title"
+            aria-describedby="screen-size-modal-description"
+          >
+            <button
+              type="button"
+              aria-label="Close dialog"
+              onClick={closeModal}
+              className="absolute inset-0 bg-background/80 backdrop-blur-sm cursor-default"
+            />
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.97, y: 8 }}
+              transition={{ duration: 0.22, ease: 'easeOut' }}
+              className="relative w-full max-w-md rounded-2xl border border-border/60 bg-surface/95 backdrop-blur-md shadow-2xl p-6 sm:p-8"
+            >
+              <button
+                type="button"
+                onClick={closeModal}
+                aria-label="Close"
+                className="absolute top-3 right-3 p-2 rounded-lg text-foreground/60 hover:text-foreground hover:bg-muted/60 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              <div className="flex items-start gap-4 mb-5">
+                <div className="shrink-0 w-11 h-11 rounded-xl bg-primary/15 text-primary flex items-center justify-center">
+                  <Monitor className="w-5 h-5" />
+                </div>
+                <div>
+                  <h2
+                    id="screen-size-modal-title"
+                    className="text-lg sm:text-xl font-semibold text-foreground mb-1"
+                  >
+                    Best viewed on a larger screen
+                  </h2>
+                  <p
+                    id="screen-size-modal-description"
+                    className="text-sm sm:text-base text-foreground/70 leading-relaxed"
+                  >
+                    This presentation is optimised for desktop and tablet
+                    displays. On smaller devices, some interactive elements may
+                    not render as intended. For the best experience, please
+                    revisit the page on a larger screen.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-2">
+                <Button variant="outline" size="md" onClick={closeModal}>
+                  Cancel
+                </Button>
+                <Button variant="primary" size="md" onClick={proceed}>
+                  Continue anyway
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </PageTransition>
   );
 }
