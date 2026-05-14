@@ -73,7 +73,7 @@ const SMALL_SCREEN_BREAKPOINT = 768;
 
 const projects: Project[] = [
   {
-    eyebrow: 'Knowledge, Reasoning and Planning Seminar HS25 · University of Basel',
+    eyebrow: 'Knowledge, Reasoning and Planning Seminar MSc Spring Semester 2026 · University of Basel',
     title: 'Spider with Axioms',
     description:
       'Rewriting an IPC-2018 Spider Solitaire PDDL domain using derived ' +

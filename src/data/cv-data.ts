@@ -95,7 +95,7 @@ export const experiences: Experience[] = [
   {
     id: 'helvetia-ai-engineer',
     title: 'Conversational AI / DevOps Engineer',
-    company: 'Helvetia Versicherungen Schweiz',
+    company: 'Helvetia Insurance Switzerland · AI & Bots',
     location: 'Basel, Switzerland (Hybrid)',
     period: 'August 2025 - Present (7 months)',
     startDate: '2025-08',
@@ -126,7 +126,7 @@ export const experiences: Experience[] = [
   {
     id: 'helvetia-data-scientist',
     title: 'Data Scientist',
-    company: 'Team Customer & Partner Data at Helvetia',
+    company: 'Helvetia Insurance Switzerland · Customer & Partner Data',
     location: 'Basel, Switzerland',
     period: 'October 2023 - July 2025',
     startDate: '2023-10',
