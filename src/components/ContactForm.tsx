@@ -21,7 +21,7 @@ export function ContactForm() {
     const form = e.currentTarget;
     const payload = new FormData(form);
     payload.append('access_key', FORM_KEY);
-    payload.append('subject', 'New Project Inquiry from Portfolio');
+    payload.append('subject', 'New message from portfolio');
     payload.append('from_name', 'Portfolio Contact Form');
 
     try {
@@ -81,21 +81,6 @@ export function ContactForm() {
           />
         </div>
         <div>
-          <label htmlFor="company" className="block text-sm font-medium text-foreground/70 mb-2">
-            Company
-          </label>
-          <input
-            type="text"
-            id="company"
-            name="company"
-            className="w-full px-4 py-3 bg-surface border border-border rounded-xl text-foreground placeholder-foreground/30 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors"
-            placeholder="Your company name"
-          />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div>
           <label htmlFor="email" className="block text-sm font-medium text-foreground/70 mb-2">
             Email *
           </label>
@@ -108,79 +93,29 @@ export function ContactForm() {
             placeholder="your@email.com"
           />
         </div>
-        <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-foreground/70 mb-2">
-            Phone
-          </label>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            className="w-full px-4 py-3 bg-surface border border-border rounded-xl text-foreground placeholder-foreground/30 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors"
-            placeholder="+41 XX XXX XX XX"
-          />
-        </div>
       </div>
 
       <div>
-        <label htmlFor="project_type" className="block text-sm font-medium text-foreground/70 mb-2">
-          Project Type *
+        <label htmlFor="reason" className="block text-sm font-medium text-foreground/70 mb-2">
+          Reason for reaching out
         </label>
         <select
-          id="project_type"
-          name="project_type"
-          required
+          id="reason"
+          name="reason"
           className="w-full px-4 py-3 bg-surface border border-border rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors"
         >
-          <option value="">Select a project type</option>
-          <option value="AI Solution">AI Solution</option>
-          <option value="Data Analysis">Data Analysis</option>
-          <option value="Web Development">Web Development</option>
-          <option value="Consulting">Consulting</option>
+          <option value="">Select a reason (optional)</option>
+          <option value="Collaboration">Collaboration</option>
+          <option value="Research or academic">Research or academic</option>
+          <option value="Job opportunity">Job opportunity</option>
+          <option value="Just saying hi">Just saying hi</option>
           <option value="Other">Other</option>
         </select>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div>
-          <label htmlFor="timeline" className="block text-sm font-medium text-foreground/70 mb-2">
-            Timeline
-          </label>
-          <select
-            id="timeline"
-            name="timeline"
-            className="w-full px-4 py-3 bg-surface border border-border rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors"
-          >
-            <option value="">Select timeline</option>
-            <option value="ASAP">ASAP</option>
-            <option value="1-2 weeks">1-2 weeks</option>
-            <option value="1 month">1 month</option>
-            <option value="2-3 months">2-3 months</option>
-            <option value="Flexible">Flexible</option>
-          </select>
-        </div>
-        <div>
-          <label htmlFor="budget" className="block text-sm font-medium text-foreground/70 mb-2">
-            Budget Range
-          </label>
-          <select
-            id="budget"
-            name="budget"
-            className="w-full px-4 py-3 bg-surface border border-border rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors"
-          >
-            <option value="">Select budget</option>
-            <option value="< 1,000 CHF">&lt; 1,000 CHF</option>
-            <option value="1,000 - 5,000 CHF">1,000 - 5,000 CHF</option>
-            <option value="5,000 - 10,000 CHF">5,000 - 10,000 CHF</option>
-            <option value="10,000+ CHF">10,000+ CHF</option>
-            <option value="To be discussed">To be discussed</option>
-          </select>
-        </div>
-      </div>
-
       <div>
         <label htmlFor="message" className="block text-sm font-medium text-foreground/70 mb-2">
-          Project Description *
+          Message *
         </label>
         <textarea
           id="message"
@@ -188,7 +123,7 @@ export function ContactForm() {
           required
           rows={5}
           className="w-full px-4 py-3 bg-surface border border-border rounded-xl text-foreground placeholder-foreground/30 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors resize-none"
-          placeholder="Briefly describe your project, goals, and any specific requirements..."
+          placeholder="What&apos;s on your mind?"
         />
       </div>
 

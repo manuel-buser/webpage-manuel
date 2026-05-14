@@ -89,7 +89,7 @@ export function Navigation() {
               href="/contact"
               className={cn(buttonVariants({ size: 'sm' }), 'ml-4')}
             >
-              Hire Me
+              Get in Touch
             </Link>
           </div>
 
@@ -151,7 +151,7 @@ export function Navigation() {
                   href="/contact"
                   className={cn(buttonVariants({ size: 'md', fullWidth: true }))}
                 >
-                  Hire Me
+                  Get in Touch
                 </Link>
               </motion.div>
             </div>

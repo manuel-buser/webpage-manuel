@@ -1,6 +1,6 @@
 import { PageTransition } from '@/components/PageTransition';
 import { ContactForm } from '@/components/ContactForm';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { Mail, MapPin } from 'lucide-react';
 import { personalInfo } from '@/data/cv-data';
 
 export const metadata = {
@@ -17,11 +17,11 @@ export default function ContactPage() {
               Get In Touch
             </h1>
             <p className="text-foreground/60 text-lg max-w-2xl mx-auto">
-              Have a project in mind? Fill out the form below and I&apos;ll get back to you as soon as possible.
+              Always happy to hear from collaborators, researchers, and curious minds. Drop a message and I&apos;ll get back to you.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12 max-w-2xl mx-auto">
             <div className="flex items-center gap-4 p-4 bg-surface border border-border rounded-xl">
               <div className="p-3 bg-primary/10 rounded-lg">
                 <Mail className="w-5 h-5 text-primary" />
@@ -29,15 +29,6 @@ export default function ContactPage() {
               <div>
                 <p className="text-sm text-foreground/50">Email</p>
                 <p className="text-foreground text-sm">{personalInfo.email}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4 p-4 bg-surface border border-border rounded-xl">
-              <div className="p-3 bg-primary/10 rounded-lg">
-                <Phone className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <p className="text-sm text-foreground/50">Phone</p>
-                <p className="text-foreground text-sm">{personalInfo.phone}</p>
               </div>
             </div>
             <div className="flex items-center gap-4 p-4 bg-surface border border-border rounded-xl">
