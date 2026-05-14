@@ -2,10 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { Download } from 'lucide-react';
 import { experiences, education } from '@/data/cv-data';
 import { TimelineItem } from './TimelineItem';
-import { Button } from './ui/Button';
 import { animateProgressLine } from '@/lib/animations/gsap-utils';
 import { supportsWebGL } from '@/lib/utils';
 
@@ -129,13 +127,6 @@ export function CVTimeline() {
           </div>
         </div>
 
-        {/* Download CV Button */}
-        <div className="text-center mt-20">
-          <Button href="/resume.pdf" download size="lg" className="group">
-            <Download className="w-5 h-5 transition-transform group-hover:-translate-y-0.5" />
-            Download Full CV
-          </Button>
-        </div>
       </div>
     </section>
   );
