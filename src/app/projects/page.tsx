@@ -7,6 +7,46 @@ import { Button } from '@/components/ui/Button';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowRight, Monitor, X } from 'lucide-react';
 
+function FloatingParticle({
+  delay,
+  x,
+  y,
+  size,
+}: {
+  delay: number;
+  x: string;
+  y: string;
+  size: number;
+}) {
+  return (
+    <motion.div
+      aria-hidden
+      className="absolute rounded-full bg-primary/20 pointer-events-none"
+      style={{ left: x, top: y, width: size, height: size }}
+      animate={{
+        y: [0, -20, 0],
+        opacity: [0.2, 0.6, 0.2],
+        scale: [1, 1.3, 1],
+      }}
+      transition={{
+        duration: 4 + delay,
+        delay,
+        repeat: Infinity,
+        ease: 'easeInOut',
+      }}
+    />
+  );
+}
+
+const comingSoonParticles = [
+  { delay: 0, x: '12%', y: '25%', size: 6 },
+  { delay: 0.6, x: '85%', y: '20%', size: 7 },
+  { delay: 1.1, x: '70%', y: '70%', size: 5 },
+  { delay: 1.7, x: '22%', y: '75%', size: 6 },
+  { delay: 0.9, x: '50%', y: '15%', size: 4 },
+  { delay: 1.4, x: '92%', y: '55%', size: 5 },
+];
+
 function GithubIcon({ className }: { className?: string }) {
   return (
     <svg
@@ -189,6 +229,68 @@ export default function ProjectsPage() {
               </motion.article>
             ))}
           </div>
+
+          {/* More to come */}
+          <motion.div
+            className="relative mt-12 sm:mt-16 max-w-4xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+          >
+            <div className="relative overflow-hidden rounded-2xl border border-dashed border-border/60 bg-surface/40 backdrop-blur-sm px-6 py-12 sm:px-10 sm:py-16 text-center">
+              <motion.div
+                aria-hidden
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[420px] h-[420px] rounded-full pointer-events-none"
+                style={{
+                  background:
+                    'radial-gradient(circle, var(--primary), var(--secondary), transparent 70%)',
+                }}
+                animate={{
+                  scale: [1, 1.15, 1],
+                  opacity: [0.06, 0.12, 0.06],
+                }}
+                transition={{
+                  duration: 7,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+              />
+
+              {comingSoonParticles.map((p, i) => (
+                <FloatingParticle key={i} {...p} />
+              ))}
+
+              <div className="relative z-10">
+                <p className="text-xs sm:text-sm font-semibold text-primary uppercase tracking-widest mb-3">
+                  Stay tuned
+                </p>
+                <motion.h3
+                  className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent bg-[length:200%_200%] text-balance"
+                  animate={{
+                    backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                  }}
+                  transition={{
+                    duration: 5,
+                    repeat: Infinity,
+                    ease: 'linear',
+                  }}
+                >
+                  More projects coming soon
+                </motion.h3>
+                <p className="mt-3 text-foreground/60 text-sm sm:text-base max-w-md mx-auto">
+                  New work is being curated. Check back soon for what&apos;s next.
+                </p>
+                <motion.div
+                  className="mt-6 mx-auto h-px bg-gradient-to-r from-transparent via-primary to-transparent"
+                  initial={{ width: 0 }}
+                  whileInView={{ width: '160px' }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }}
+                />
+              </div>
+            </div>
+          </motion.div>
         </Container>
       </section>
 
