@@ -97,7 +97,7 @@ export const experiences: Experience[] = [
     title: 'Conversational AI / DevOps Engineer',
     company: 'Helvetia Insurance Switzerland · AI & Bots',
     location: 'Basel, Switzerland (Hybrid)',
-    period: 'August 2025 - Present (7 months)',
+    period: 'August 2025 - Present',
     startDate: '2025-08',
     endDate: 'present',
     type: 'work',
